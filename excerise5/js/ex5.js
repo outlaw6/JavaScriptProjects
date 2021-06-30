@@ -8,6 +8,9 @@ $.ajax( {
   dataType: "json",
     success: function(data) {
     present_question(data);
+    if (localStorage.selectedcountry) {
+    	$('#countries').val(localStorage.selectedcountry);
+    }
   },
   error: function() {
     console.log("error in the request");
@@ -28,14 +31,14 @@ function present_question(data) {
   }
 }
 
-$("#countries").click(function(e) {
-	var x = document.getElementById("countries").selectedIndex;
-	var y = document.getElementById("countries").options;
-	console.log("Index: " + y[x].index + " is " + y[x].text);
-	console.log(y[x]);
-	window.localStorage.setItem("countries", y[x].text);
-	country = y[x];
-});
+// $("#countries").click(function(e) {
+// 	var x = document.getElementById("countries").selectedIndex;
+// 	var y = document.getElementById("countries").options;
+// 	console.log("Index: " + y[x].index + " is " + y[x].text);
+// 	console.log(y[x]);
+// 	window.localStorage.setItem("countries", y[x].text);
+// 	country = y[x];
+// });
 var courses = '[{"title": "PHP","reviews": [] },\
 				{"title": "Javascript","reviews": [5,5,4.5,4,5,5,5,4.5] },\
 				{"title": "Python","reviews": [5,5,4,4,5,3,5,4,4,5] },\
@@ -81,17 +84,10 @@ function parse_json(courses) {
 
 
 
- $(document).ready(function(){
+ $('#countries').change(function(){
 
-     	// var selectField = document.getElementById("countries");
- //    var selectedOption = selectField.options.selectedIndex;
- //    var selectedValue = selectField.options[selectedOption].innerHTML;
- //    selectedValue.text = country;
-    // $('#countries').val(localStorage['countries']);
-    // // console.log((localStorage."countries").toString());
-    selectField.value = localStorage['countries'];
-    console.log(localStorage["countries"]);
-    console.log(parse_json(courses));
+ 	localStorage.setItem('selectedcountry', $('#countries').val());
+
     });
 
 
