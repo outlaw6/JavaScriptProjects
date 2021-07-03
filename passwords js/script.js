@@ -28,10 +28,6 @@ function getSymbol() {
 
 alert(getNumber());
 var btn = document.getElementById('generate');
-// generate.onclick = function() {
-// 	console.log(getLowercase());
-// }
-
 generate.addEventListener('click', generatePassword);
 
 function generatePassword() {
@@ -52,18 +48,18 @@ function generatePassword() {
 function generatePWD() {
 	console.log('im in generatepwd');
 	var pwd = '';
+	const containerp = []
 	if (upper.checked) {
-		pwd += getUppercase();
+		containerp.push(getUppercase());
 	}
 	if (lower.checked) {
-		pwd += getLowercase();
+		containerp.push(getLowercase());
 	}
 	if (number.checked) {
-		pwd += getNumber();
+		containerp.push(getNumber());
 	}
 	if (symbol.checked) {
-		pwd += getSymbol();
+		containerp.push(getSymbol());
 	}
-	console.log(pwd);
-	return pwd;
+	return containerp[Math.floor(Math.random() * containerp.length)];
 }
