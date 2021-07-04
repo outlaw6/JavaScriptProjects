@@ -26,7 +26,7 @@ function getSymbol() {
 	return symbols[Math.floor(Math.random() * symbols.length)];
 }
 
-alert(getNumber());
+
 var btn = document.getElementById('generate');
 generate.addEventListener('click', generatePassword);
 
@@ -46,7 +46,7 @@ function generatePassword() {
 }
 
 function generatePWD() {
-	console.log('im in generatepwd');
+	
 	var pwd = '';
 	const containerp = []
 	if (upper.checked) {
