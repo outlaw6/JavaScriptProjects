@@ -11,7 +11,9 @@ let blackjackGame = {
 	'cardsMap': {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'K': 10, 'J': 10, 'Q': 10, 'A': [1, 11]},
 	'wins': 0,
 	'losses': 0,
-	'draws': 0
+	'draws': 0,
+	'isStand': false,
+	'turnsOver': false,
 };
 
 let a = document.querySelector('#blackjack-hit-button')
@@ -33,12 +35,15 @@ const lostSound = new Audio('sounds/aww.mp3');
 
 
 function blackjackHit() {
+	if (blackjackGame['isStand'] === false) {
 	let card = randomCard();
 	console.log(card);
 	showCard(card, YOU);
 	updateScore(card, YOU);
 	
 	showScore(YOU);
+	}
+
 }
 
 
@@ -61,6 +66,10 @@ function showCard(card, activePlayer) {
 }
 
 function blackjackDeal() {
+
+	if (blackjackGame['turnsOver'] === true) {
+
+		blackjackGame['isStand'] = false;
 		showResult(computeWinner());
 		let yourImages = document.querySelector('#your-box').querySelectorAll('img');
 
@@ -84,7 +93,11 @@ function blackjackDeal() {
 		document.querySelector('#your-blackjack-result').style.color = '#ffffff';
 		document.querySelector('#dealer-blackjack-result').style.color = '#ffffff';
 
+		document.querySelector('#blackjack-result').textContent = 'Letplay again ';
+		document.querySelector('#blackjack-result').style.color = 'black';
+		blackjackGame['turnsOver'] = true;
 
+	}
 
 }
 
@@ -116,14 +129,18 @@ function showScore(activePlayer) {
 }
 
 function dealerLogic() {
+	blackjackGame['isStand'] = true;
 	let card = randomCard();
 	showCard(card, DEALER);
 	updateScore(card, DEALER);
 	showScore(DEALER);
 
-
-
-
+	if (DEALER['score'] > 15) {
+		blackjackGame['turnsOver'] = true;
+		let winner = computeWinner();
+		showResult(winner);
+		console.log(blackjackGame['turnsOver']);
+	}
 }
 
 function computeWinner() {
@@ -161,6 +178,9 @@ function computeWinner() {
 
 function showResult(winner) {
 	let message, messageColor;
+
+
+	if (blackjackGame['turnsOver'] === true) {
 	if (winner === YOU) {
 		document.querySelector('#wins').textContent = blackjackGame['wins'];
 		message = "You won!";
@@ -178,5 +198,7 @@ function showResult(winner) {
 	}
 	document.querySelector('#blackjack-result').textContent = message;
 	document.querySelector('#blackjack-result').style.color = messageColor;
-}
+}		
+	}
+
 //black jack js
