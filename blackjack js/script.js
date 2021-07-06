@@ -8,7 +8,10 @@ let blackjackGame = {
 	'you': {   'scoreSpan': '#your-blackjack-result',   'div': '#your-box', 'score': 0},
 	'dealer': {'scoreSpan': '#dealer-blackjack-result', 'div': '#dealer-box', 'score': 0},
 	'cards': ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'K', 'J', 'Q', 'A'],
-	'cardsMap': {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'K': 10, 'J': 10, 'Q': 10, 'A': [1, 11]}
+	'cardsMap': {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'K': 10, 'J': 10, 'Q': 10, 'A': [1, 11]},
+	'wins': 0,
+	'losses': 0,
+	'draws': 0
 };
 
 let a = document.querySelector('#blackjack-hit-button')
@@ -58,6 +61,7 @@ function showCard(card, activePlayer) {
 }
 
 function blackjackDeal() {
+		showResult(computeWinner());
 		let yourImages = document.querySelector('#your-box').querySelectorAll('img');
 
 		let dealerImages = document.querySelector('#dealer-box').querySelectorAll('img');
@@ -69,7 +73,7 @@ function blackjackDeal() {
 		for (let a=0;a<dealerImages.length;a++) {
 			dealerImages[a].remove();
 		}
-				computeWinner();
+
 		document.querySelector('#your-blackjack-result').textContent = 0;
 		YOU['score'] = 0;
 		DEALER['score'] = 0;
@@ -117,7 +121,7 @@ function dealerLogic() {
 	updateScore(card, DEALER);
 	showScore(DEALER);
 
-	showResult();
+
 
 
 }
@@ -129,21 +133,26 @@ function computeWinner() {
 		//condition higher score than dealer or whom
 		if (YOU['score'] > DEALER['score'] || (DEALER['score'] > 21)) {
 			console.log('You won');
-			winner = YOU;
+			blackjackGame['wins'] += 1;
+ 			winner = YOU;
 		} else if (YOU['score'] < DEALER['score']) {
 			console.log('You lost');
+			blackjackGame['losses'] += 1;
 			winner = DEALER;
 		} else if (YOU['score'] === DEALER['score']) {
 			console.log('You drew!');
+			blackjackGame['draws'] += 1;
 		}
 	// condiition: not under 21 but but, dealer doesnt bust
 	 else if (YOU['score'] > 21 && DEALER['score'] <= 21) {
 	 	console.log('You lost');
+	 	blackjackGame['losses'] += 1
 	 	winner = DEALER;
 
 	//conditon : when both bust (dealer, user)
 	 } else if (YOU['score'] > 21 && DEALER['score'] > 21) {
 	 	console.log('You drew');
+	 	blackjackGame['draws'] += 1;
 	 }
 	 console.log("winner is");
  	return winner;
@@ -153,14 +162,17 @@ function computeWinner() {
 function showResult(winner) {
 	let message, messageColor;
 	if (winner === YOU) {
+		document.querySelector('#wins').textContent = blackjackGame['wins'];
 		message = "You won!";
 		messageColor = 'green';
 		winSound.play();
 	} else if  (winner === DEALER) {
+		document.querySelector('#losses').textContent = blackjackGame['losses'];
 		message = "You lost";
 		messageColor = 'red';
 		lostSound.play();
 	} else {
+		document.querySelector('#draws').textContent = blackjackGame['draws'];
 		message = "You drew";
 		messageColor = 'black';
 	}
